@@ -8,6 +8,7 @@ public class PCameraInteract : MonoBehaviour
     protected Camera camera;
     private Interactable curInteractable;
     private bool mouseClick;
+    private bool rightMouseClick;
 
     // Start is called before the first frame update
     void Start()
@@ -29,6 +30,10 @@ public class PCameraInteract : MonoBehaviour
 
     private void PlayerInteraction()
     {
+        if (curInteractable != null && curInteractable.isBeingHeld) // Stick with the object being held
+        {
+            return;
+        }
         RaycastHit hit;
         Ray ray = new Ray(transform.position, transform.position + interactDistance * transform.forward);
         Debug.DrawLine(transform.position, transform.position + interactDistance * transform.forward, Color.yellow);
@@ -46,6 +51,10 @@ public class PCameraInteract : MonoBehaviour
                     if (hitObject != curInteractable) // Object is a new interactable
                     {
                         hitObject.OnBeginLooked();
+                        if(curInteractable != null)
+                        {
+                            curInteractable.OnEndLooked();
+                        }
                         curInteractable = hitObject;
                     }
                     else if (hitObject == curInteractable)
@@ -67,11 +76,31 @@ public class PCameraInteract : MonoBehaviour
             }
             //Debug.LogWarning("Hit dist: " + hit.distance);
         }
+        else if (curInteractable != null)
+        {
+            curInteractable.OnEndLooked();
+            curInteractable = null;
+            //switch (curInteractable.InteractType)
+            //{
+            //    case Interactable.EInteractType.EHoldable:
+            //        if(!curInteractable.isBeingHeld)
+            //        {
+            //            curInteractable.OnEndLooked();
+            //            curInteractable = null;
+            //        }
+            //        break;
+            //    default:
+            //        curInteractable.OnEndLooked();
+            //        curInteractable = null;
+            //        break;
+            //}
+        }
     }
 
     private void Update()
     {
         mouseClick = Input.GetMouseButtonDown(0);
+        rightMouseClick = Input.GetMouseButtonDown(1);
     }
 
 
@@ -82,6 +111,10 @@ public class PCameraInteract : MonoBehaviour
             if (mouseClick)
             {
                 curInteractable.OnInteract(this);
+            }
+            else if(rightMouseClick)
+            {
+                curInteractable.OnSecondaryInteract(this);
             }
             else
             {

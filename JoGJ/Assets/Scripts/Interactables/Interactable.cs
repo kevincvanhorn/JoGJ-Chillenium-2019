@@ -5,6 +5,7 @@ using UnityEngine;
 public class Interactable : MonoBehaviour
 {
     public float targetWidth = 5.0f;
+    public float throwStrength = 20.0f;
     private bool isLookedAt;
 
     public bool isBeingHeld = false;
@@ -37,7 +38,7 @@ public class Interactable : MonoBehaviour
     {
         if (rigidbody)
         {
-            rigidbody.transform.position = camTrans.position + HoldOffset* camTrans.forward;
+            rigidbody.transform.position = camTrans.position + HoldOffset * camTrans.forward;
         }
     }
 
@@ -60,6 +61,20 @@ public class Interactable : MonoBehaviour
             {
                 rigidbody.isKinematic = false;
                 collider.enabled = true;
+            }
+        }
+    }
+
+    public void OnSecondaryInteract(PCameraInteract cameraParentIn)
+    {
+        if(InteractType == EInteractType.EHoldable)
+        {
+            if(isBeingHeld)
+            {
+                rigidbody.isKinematic = false;
+                collider.enabled = true;
+                isBeingHeld = false;
+                rigidbody.AddForce(cameraParentIn.transform.forward * throwStrength, ForceMode.Impulse);
             }
         }
     }

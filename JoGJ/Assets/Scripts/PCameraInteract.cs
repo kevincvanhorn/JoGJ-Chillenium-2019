@@ -32,8 +32,8 @@ public class PCameraInteract : MonoBehaviour
     private void PlayerInteraction()
     {
         RaycastHit hit;
-        Ray ray = new Ray(transform.position, transform.position + 1000.0f * transform.forward);
-        Debug.DrawLine(transform.position, transform.position + 1000.0f * transform.forward, Color.red);
+        Ray ray = new Ray(transform.position, transform.position + interactDistance * transform.forward);
+        Debug.DrawLine(transform.position, transform.position + interactDistance * transform.forward, Color.red);
         if (Physics.Raycast(ray, out hit))
         {
             GameObject hitGameObject = hit.collider.gameObject;

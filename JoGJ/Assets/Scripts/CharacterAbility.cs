@@ -44,14 +44,25 @@ public class CharacterAbility : MonoBehaviour
         }
     }
 
-    public void OnUseAbility(ref RaycastHit aimHit)
+    public void OnUseAbility(RaycastHit aimHit)
     {
-        if(builtPillars.Count == maxPillars)
+        if (abilityType == EAbilityType.EGreen)
         {
-            Destroy(builtPillars.Dequeue());
+            if (builtPillars.Count == maxPillars)
+            {
+                Destroy(builtPillars.Dequeue());
+            }
+            Debug.Log(aimHit.normal);
+            if(aimHit.normal.y < 0.01f)
+            {
+                curBuildPillar = Instantiate(pillar, aimHit.point, Quaternion.LookRotation(aimHit.normal, Vector3.forward));
+            }
+            else
+            {
+                curBuildPillar = Instantiate(pillar, aimHit.point, Quaternion.LookRotation(aimHit.normal, transform.forward));
+            }
+            builtPillars.Enqueue(curBuildPillar);
+            currentlyExpanding = true;
         }
-        curBuildPillar = Instantiate(pillar, aimHit.point, Quaternion.LookRotation(aimHit.normal, Vector3.forward));
-        builtPillars.Enqueue(curBuildPillar);
-        currentlyExpanding = true;
     }
 }

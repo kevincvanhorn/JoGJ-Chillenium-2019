@@ -141,7 +141,7 @@ public class PCameraInteract : MonoBehaviour
             }*/
             if (secondaryInteract && MyCamera)
             {
-                    characterAbility.OnUseAbility(ref aimHit);
+                    characterAbility.OnUseAbility(aimHit);
                 
             }
 

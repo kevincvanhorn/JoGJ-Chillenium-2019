@@ -46,6 +46,10 @@ public class PCameraInteract : MonoBehaviour
                     if (hitObject != curInteractable) // Object is a new interactable
                     {
                         hitObject.OnBeginLooked();
+                        if(curInteractable != null)
+                        {
+                            curInteractable.OnEndLooked();
+                        }
                         curInteractable = hitObject;
                     }
                     else if (hitObject == curInteractable)
@@ -66,6 +70,23 @@ public class PCameraInteract : MonoBehaviour
                 
             }
             //Debug.LogWarning("Hit dist: " + hit.distance);
+        }
+        else if (curInteractable != null)
+        {
+            switch (curInteractable.InteractType)
+            {
+                case Interactable.EInteractType.EHoldable:
+                    if(!curInteractable.isBeingHeld)
+                    {
+                        curInteractable.OnEndLooked();
+                        curInteractable = null;
+                    }
+                    break;
+                default:
+                    curInteractable.OnEndLooked();
+                    curInteractable = null;
+                    break;
+            }
         }
     }
 

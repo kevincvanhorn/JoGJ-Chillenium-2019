@@ -37,7 +37,7 @@ public class Interactable : MonoBehaviour
     {
         if (rigidbody)
         {
-            rigidbody.transform.position = camTrans.position + HoldOffset* camTrans.forward;
+            rigidbody.transform.position = camTrans.position + HoldOffset * camTrans.forward;
         }
     }
 

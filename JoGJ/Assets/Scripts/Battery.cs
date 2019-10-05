@@ -13,15 +13,25 @@ public class Battery : MonoBehaviour
         currentAmount = capacity;
     }
 
-    public void chargeBattery(float amount) {
+    public float chargeBattery(float amount) {
+        float oldAmount = currentAmount;
         currentAmount += amount;
         if(currentAmount > capacity) currentAmount = capacity;
         Debug.Log(currentAmount);
+        //return the amount of charge gained
+        return ((capacity - oldAmount) > amount) ? amount : (capacity - oldAmount);
     }
 
-    public void drainBattery(float amount) {
+    public float drainBattery(float amount) {
+        float oldAmount = currentAmount;
         currentAmount -= amount;
         if(currentAmount < 0) currentAmount = 0;
         Debug.Log(currentAmount);
+        //return the amount of charge drained
+        return (oldAmount > amount) ? amount : oldAmount;
+    }
+
+    public float getCurrentAmount() {
+        return currentAmount;
     }
 }

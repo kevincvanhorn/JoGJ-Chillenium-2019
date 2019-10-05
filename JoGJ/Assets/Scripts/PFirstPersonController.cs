@@ -13,9 +13,14 @@ public class PFirstPersonController : MonoBehaviour
     protected Rigidbody rigidBody;
     private Vector3 PlayerDirX, PlayerDirZ;
 
+    private Battery battery;
+    public float movementBatteryDrain = 1.0f;
+
     // Start is called before the first frame update
     void Start()
     {
+        battery = this.GetComponent<Battery>();
+
         Cursor.lockState = CursorLockMode.Locked;
 
         // Get Components attached to this object.
@@ -34,5 +39,9 @@ public class PFirstPersonController : MonoBehaviour
         velocity.y = rigidBody.velocity.y;
 
         rigidBody.velocity = velocity;
+
+        //drain battery
+        float amount = Mathf.Abs(Input.GetAxis("Vertical")) + Mathf.Abs(Input.GetAxis("Horizontal"));
+        if(amount > 0.01f) battery.drainBattery(amount * movementBatteryDrain * Time.deltaTime);
     }
 }

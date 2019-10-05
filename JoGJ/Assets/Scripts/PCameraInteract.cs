@@ -12,11 +12,14 @@ public class PCameraInteract : MonoBehaviour
     private bool secondaryInteract;
     private RaycastHit aimHit;
 
+    Camera MyCamera;
+
     // Start is called before the first frame update
     void Start()
     {
         curInteractable = null;
         characterAbility = GetComponent<CharacterAbility>();
+        MyCamera = GetComponent<Camera>();
 
        // StartCoroutine("CastTick");
     }
@@ -36,8 +39,9 @@ public class PCameraInteract : MonoBehaviour
         {
             return;
         }
+
         RaycastHit hit;
-        Ray ray = new Ray(transform.position, transform.position + rayDistance * transform.forward);
+        Ray ray = MyCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         Debug.DrawLine(transform.position, transform.position + rayDistance * transform.forward, Color.yellow);
         if (Physics.Raycast(ray, out hit))
         {
@@ -135,9 +139,10 @@ public class PCameraInteract : MonoBehaviour
             {
                 characterAbility.OnUseAbility(aimHit);
             }*/
-            if (secondaryInteract)
+            if (secondaryInteract && MyCamera)
             {
-                characterAbility.OnUseAbility(aimHit);
+                    characterAbility.OnUseAbility(ref aimHit);
+                
             }
 
             PlayerInteraction();

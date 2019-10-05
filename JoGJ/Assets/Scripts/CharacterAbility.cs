@@ -44,7 +44,7 @@ public class CharacterAbility : MonoBehaviour
         }
     }
 
-    public void OnUseAbility(RaycastHit aimHit)
+    public void OnUseAbility(ref RaycastHit aimHit)
     {
         if(builtPillars.Count == maxPillars)
         {

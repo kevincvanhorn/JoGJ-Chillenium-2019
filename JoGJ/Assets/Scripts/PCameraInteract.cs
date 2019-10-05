@@ -8,6 +8,7 @@ public class PCameraInteract : MonoBehaviour
     protected Camera camera;
     private Interactable curInteractable;
     private bool mouseClick;
+    private bool rightMouseClick;
 
     // Start is called before the first frame update
     void Start()
@@ -93,6 +94,7 @@ public class PCameraInteract : MonoBehaviour
     private void Update()
     {
         mouseClick = Input.GetMouseButtonDown(0);
+        rightMouseClick = Input.GetMouseButtonDown(1);
     }
 
 
@@ -103,6 +105,10 @@ public class PCameraInteract : MonoBehaviour
             if (mouseClick)
             {
                 curInteractable.OnInteract(this);
+            }
+            else if(rightMouseClick)
+            {
+                curInteractable.OnSecondaryInteract(this);
             }
             else
             {

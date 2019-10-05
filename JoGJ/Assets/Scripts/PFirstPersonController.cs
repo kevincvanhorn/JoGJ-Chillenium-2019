@@ -24,6 +24,10 @@ public class PFirstPersonController : MonoBehaviour
     private GameObject checkpoint; //the last checkpoint the player visited
     private Vector3 initialPostion; //where the character starts the game
 
+    private float DefaultPlayerJumpHeight, DefaultPlayerSprintSpeed, DefaultPlayerSpeed;
+
+    public float airFactor = 1;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -57,7 +61,9 @@ public class PFirstPersonController : MonoBehaviour
         if (!rigidBody) return;
 
         //check for dead battery
-        if(battery.getCurrentAmount() <= 0.01f) return;
+        if(battery.getCurrentAmount() <= 0.01f){
+            PlayerJumpHeight = PlayerSprintSpeed = PlayerSpeed = 0;
+        }
 
         PlayerDirZ = Input.GetAxis("Vertical") * rigidBody.transform.forward;
         PlayerDirX = Input.GetAxis("Horizontal") * rigidBody.transform.right;
@@ -91,7 +97,16 @@ public class PFirstPersonController : MonoBehaviour
             velocity += Vector3.up * Physics.gravity.y * (2 - 1) * Time.deltaTime;
         }
 
+        if (!onGround)
+        {
+            float yCache = velocity.y;
+            velocity.x = rigidBody.velocity.x * (1-airFactor) + velocity.x * airFactor;
+            velocity.z = rigidBody.velocity.z *(1-airFactor) + velocity.z* airFactor;
+        }
+
+        //rigidBody.velocity = velocity;
         rigidBody.velocity = velocity;
+
 
         //drain battery
         float amount = Mathf.Abs(Input.GetAxis("Vertical")) + Mathf.Abs(Input.GetAxis("Horizontal"));
@@ -104,7 +119,6 @@ public class PFirstPersonController : MonoBehaviour
     public void reset() {
         gameObject.transform.position = (checkpoint != null) ? checkpoint.transform.position : initialPostion;
         battery.reset();
-
     }
 
     public void setCheckpoint(GameObject checkpoint) {

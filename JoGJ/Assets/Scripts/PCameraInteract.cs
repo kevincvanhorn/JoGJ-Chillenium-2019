@@ -6,18 +6,15 @@ public class PCameraInteract : MonoBehaviour
 {
     public float interactDistance = 10.0f;
     protected Camera camera;
-    private Interactable previousLook;
-    private Interactable currentLook;
-    
+    private Interactable curInteractable;
 
     // Start is called before the first frame update
     void Start()
     {
         camera = GetComponent<Camera>();
-        previousLook = null;
-        currentLook = null;
+        curInteractable = null;
 
-        StartCoroutine("CastTick");
+       // StartCoroutine("CastTick");
     }
 
     IEnumerator CastTick()
@@ -45,29 +42,57 @@ public class PCameraInteract : MonoBehaviour
 
                 if (hitObject != null)
                 {
-                    if (hitObject != previousLook)
+                    if (hitObject != curInteractable)
                     {
                         hitObject.OnBeginInteract();
-                        previousLook = hitObject;
+                        curInteractable = hitObject;
                     }
-                    else if (hitObject == previousLook)
+                    else if (hitObject == curInteractable)
                     {
 
                     }
                     else
                     {
-                        if (previousLook != null) hitObject.OnEndInteract();
-                        previousLook = null;
+                        if (curInteractable != null) hitObject.OnEndInteract();
+                        curInteractable = null;
                     }
                 }
-                else if (previousLook != null)
+                else if (curInteractable != null)
                 {
-                    previousLook.OnEndInteract();
-                    previousLook = null;
+                    curInteractable.OnEndInteract();
+                    curInteractable = null;
                 }
                 
             }
-            //Debug.Log("Hit dist: " + hit.distance);
+            Debug.LogWarning("Hit dist: " + hit.distance);
+        }
+    }
+
+
+    private void FixedUpdate()
+    {
+        if (curInteractable)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                curInteractable.isBeingHeld = !curInteractable.isBeingHeld;
+                curInteractable.OnHoldInteraction(curInteractable.isBeingHeld);
+            }
+
+            if (curInteractable.isBeingHeld)
+            {
+                curInteractable.UpdateTransform(this.transform);
+            }
+            else
+            {
+                PlayerInteraction();
+            }
+        }
+        else
+        {
+            PlayerInteraction();
         }
     }
 }
+
+

@@ -30,6 +30,10 @@ public class PCameraInteract : MonoBehaviour
 
     private void PlayerInteraction()
     {
+        if (curInteractable != null && curInteractable.isBeingHeld) // Stick with the object being held
+        {
+            return;
+        }
         RaycastHit hit;
         Ray ray = new Ray(transform.position, transform.position + interactDistance * transform.forward);
         Debug.DrawLine(transform.position, transform.position + interactDistance * transform.forward, Color.yellow);
@@ -74,20 +78,22 @@ public class PCameraInteract : MonoBehaviour
         }
         else if (curInteractable != null)
         {
-            switch (curInteractable.InteractType)
-            {
-                case Interactable.EInteractType.EHoldable:
-                    if(!curInteractable.isBeingHeld)
-                    {
-                        curInteractable.OnEndLooked();
-                        curInteractable = null;
-                    }
-                    break;
-                default:
-                    curInteractable.OnEndLooked();
-                    curInteractable = null;
-                    break;
-            }
+            curInteractable.OnEndLooked();
+            curInteractable = null;
+            //switch (curInteractable.InteractType)
+            //{
+            //    case Interactable.EInteractType.EHoldable:
+            //        if(!curInteractable.isBeingHeld)
+            //        {
+            //            curInteractable.OnEndLooked();
+            //            curInteractable = null;
+            //        }
+            //        break;
+            //    default:
+            //        curInteractable.OnEndLooked();
+            //        curInteractable = null;
+            //        break;
+            //}
         }
     }
 

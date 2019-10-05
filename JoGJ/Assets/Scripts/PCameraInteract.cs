@@ -7,6 +7,7 @@ public class PCameraInteract : MonoBehaviour
     public float interactDistance = 10.0f;
     protected Camera camera;
     private Interactable curInteractable;
+    private bool mouseClick;
 
     // Start is called before the first frame update
     void Start()
@@ -40,9 +41,9 @@ public class PCameraInteract : MonoBehaviour
             {
                 Debug.Log("Hitting");
 
-                if (hitObject != null)
+                if (hitObject != null) // Object is interactable
                 {
-                    if (hitObject != curInteractable)
+                    if (hitObject != curInteractable) // Object is a new interactable
                     {
                         hitObject.OnBeginLooked();
                         curInteractable = hitObject;
@@ -64,8 +65,13 @@ public class PCameraInteract : MonoBehaviour
                 }
                 
             }
-            Debug.LogWarning("Hit dist: " + hit.distance);
+            //Debug.LogWarning("Hit dist: " + hit.distance);
         }
+    }
+
+    private void Update()
+    {
+        mouseClick = Input.GetMouseButtonDown(0);
     }
 
 
@@ -73,7 +79,7 @@ public class PCameraInteract : MonoBehaviour
     {
         if (curInteractable)
         {
-            if (Input.GetMouseButtonDown(0))
+            if (mouseClick)
             {
                 curInteractable.OnInteract(this);
             }

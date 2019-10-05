@@ -561,6 +561,14 @@ PrefabInstance:
       propertyPath: movementBatteryDrain
       value: 10
       objectReference: {fileID: 0}
+<<<<<<< HEAD
+    - target: {fileID: 4173897199358747961, guid: cc78d8294192c0247a0c7426bdd5bbe2,
+        type: 3}
+      propertyPath: PlayerSprintSpeed
+      value: 30
+      objectReference: {fileID: 0}
+=======
+>>>>>>> e4b2052dbf6b4217550b5f681d37069f0ced03dc
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cc78d8294192c0247a0c7426bdd5bbe2, type: 3}
 --- !u!1 &1552836690
@@ -608,7 +616,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 385ff3d882873a6458836729d5c0e318, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chargeAmount: 2
+  chargeAmount: 20
 --- !u!135 &1552836693
 SphereCollider:
   m_ObjectHideFlags: 0

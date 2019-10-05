@@ -8,10 +8,15 @@ public class PFirstPersonController : MonoBehaviour
 
     // Movement Variables
     public float PlayerSpeed = 10.0f;
+    public float PlayerSprintSpeed = 50.0f;
+    public float PlayerJumpHeight = 5.0f;
     protected Vector3 PlayerDirection;
 
     protected Rigidbody rigidBody;
     private Vector3 PlayerDirX, PlayerDirZ;
+    private bool PlayerJumpInput;
+    private bool PlayerSprintInput;
+    private bool onGround;
 
     private Battery battery;
     public float movementBatteryDrain = 1.0f;
@@ -25,7 +30,21 @@ public class PFirstPersonController : MonoBehaviour
 
         // Get Components attached to this object.
         rigidBody = GetComponent<Rigidbody>();
+        Debug.Log("start");
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("Grounded");
+        onGround = true;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        Debug.Log("Airborne");
+        onGround = false;
+    }
+
 
     // Update is called once per frame
     void FixedUpdate()
@@ -34,9 +53,35 @@ public class PFirstPersonController : MonoBehaviour
 
         PlayerDirZ = Input.GetAxis("Vertical") * rigidBody.transform.forward;
         PlayerDirX = Input.GetAxis("Horizontal") * rigidBody.transform.right;
+        PlayerJumpInput = Input.GetButton("Jump");
+        PlayerSprintInput = Input.GetButton("Sprint");
 
-        Vector3 velocity = PlayerSpeed * (PlayerDirZ + PlayerDirX);
+        Vector3 velocity;
+
+        if (PlayerSprintInput)
+        {
+            velocity = PlayerSprintSpeed * (PlayerDirZ + PlayerDirX);
+        }
+        else
+        {
+            velocity = PlayerSpeed * (PlayerDirZ + PlayerDirX);
+        }
+
         velocity.y = rigidBody.velocity.y;
+
+        Debug.Log("OnGround: " + onGround);
+        if (PlayerJumpInput)
+        {
+            if (onGround)
+            {
+                velocity = new Vector3(rigidBody.velocity.x, PlayerJumpHeight, rigidBody.velocity.z);
+            }
+        }
+
+        if (velocity.y > 0 && !(PlayerJumpInput))
+        {
+            velocity += Vector3.up * Physics.gravity.y * (2 - 1) * Time.deltaTime;
+        }
 
         rigidBody.velocity = velocity;
 

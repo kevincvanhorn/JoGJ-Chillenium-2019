@@ -21,10 +21,15 @@ public class PFirstPersonController : MonoBehaviour
     private Battery battery;
     public float movementBatteryDrain = 10.0f;
 
+    private GameObject checkpoint; //the last checkpoint the player visited
+    private Vector3 initialPostion; //where the character starts the game
+
     // Start is called before the first frame update
     void Start()
     {
         battery = this.GetComponent<Battery>();
+
+        initialPostion = gameObject.transform.position;
 
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -93,5 +98,16 @@ public class PFirstPersonController : MonoBehaviour
         amount *= (PlayerSprintInput) ? PlayerSprintSpeed : PlayerSpeed;
         amount /= PlayerSpeed;
         if(amount > 0.01f) battery.drainBattery(amount * movementBatteryDrain * Time.deltaTime);
+    }
+
+    //use when the robot runs out of battery
+    public void reset() {
+        gameObject.transform.position = (checkpoint != null) ? checkpoint.transform.position : initialPostion;
+        battery.reset();
+
+    }
+
+    public void setCheckpoint(GameObject checkpoint) {
+        this.checkpoint = checkpoint;
     }
 }

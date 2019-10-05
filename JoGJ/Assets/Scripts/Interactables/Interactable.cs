@@ -9,6 +9,7 @@ public class Interactable : MonoBehaviour
     private bool isLookedAt;
 
     public bool isBeingHeld = false;
+    public bool isToggled = false;
     public float HoldOffset;
 
     protected Rigidbody rigidbody;
@@ -18,7 +19,8 @@ public class Interactable : MonoBehaviour
 
     public enum EInteractType{
         EHoldable,
-        EMoveable
+        EMoveable,
+        EToggleable
     }
 
     public EInteractType InteractType;
@@ -62,6 +64,10 @@ public class Interactable : MonoBehaviour
                 rigidbody.isKinematic = false;
                 collider.enabled = true;
             }
+        }
+        else if (InteractType == EInteractType.EToggleable)
+        {
+            isToggled = !isToggled;
         }
     }
 

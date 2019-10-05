@@ -4,17 +4,19 @@ using UnityEngine;
 
 public class PCameraInteract : MonoBehaviour
 {
-    public float interactDistance = 10.0f;
-    protected Camera camera;
+    public float rayDistance = 1000.0f; // Distance the player ray can go
+    public float interactDistance = 10.0f; // Distance the player can interact with objects
     private Interactable curInteractable;
-    private bool mouseClick;
-    private bool rightMouseClick;
+    private CharacterAbility characterAbility;
+    private bool primaryInteract;
+    private bool secondaryInteract;
+    private RaycastHit aimHit;
 
     // Start is called before the first frame update
     void Start()
     {
-        camera = GetComponent<Camera>();
         curInteractable = null;
+        characterAbility = GetComponent<CharacterAbility>();
 
        // StartCoroutine("CastTick");
     }
@@ -35,46 +37,50 @@ public class PCameraInteract : MonoBehaviour
             return;
         }
         RaycastHit hit;
-        Ray ray = new Ray(transform.position, transform.position + interactDistance * transform.forward);
-        Debug.DrawLine(transform.position, transform.position + interactDistance * transform.forward, Color.yellow);
+        Ray ray = new Ray(transform.position, transform.position + rayDistance * transform.forward);
+        Debug.DrawLine(transform.position, transform.position + rayDistance * transform.forward, Color.yellow);
         if (Physics.Raycast(ray, out hit))
         {
             GameObject hitGameObject = hit.collider.gameObject;
-            Debug.Log(hitGameObject.name);
+            //Debug.Log(hitGameObject.name);
+            //Debug.LogWarning("Hit dist: " + hit.distance);
+
             Interactable hitObject = hitGameObject.GetComponent<Interactable>();
-            if (hit.distance < interactDistance)
+
+            if (hitObject != null && hit.distance < interactDistance) // Object is interactable and within interact distance
             {
-                Debug.Log("Hitting");
-
-                if (hitObject != null) // Object is interactable
+                if (hitObject != curInteractable) // Object is a new interactable
                 {
-                    if (hitObject != curInteractable) // Object is a new interactable
+                    hitObject.OnBeginLooked();
+                    if(curInteractable != null)
                     {
-                        hitObject.OnBeginLooked();
-                        if(curInteractable != null)
-                        {
-                            curInteractable.OnEndLooked();
-                        }
-                        curInteractable = hitObject;
+                        curInteractable.OnEndLooked();
                     }
-                    else if (hitObject == curInteractable)
-                    {
-
-                    }
-                    else
-                    {
-                        if (curInteractable != null) hitObject.OnEndLooked();
-                        curInteractable = null;
-                    }
+                    curInteractable = hitObject;
                 }
-                else if (curInteractable != null)
+                else if (hitObject == curInteractable)
                 {
-                    curInteractable.OnEndLooked();
+
+                }
+                else
+                {
+                    if (curInteractable != null) hitObject.OnEndLooked();
                     curInteractable = null;
                 }
-                
             }
-            //Debug.LogWarning("Hit dist: " + hit.distance);
+            else if (curInteractable != null)
+            {
+                curInteractable.OnEndLooked();
+                curInteractable = null;
+            }
+
+            if(hitObject == null)
+            {
+                aimHit = hit;
+                //Debug.Log(aimHit.point);
+            }
+                
+            
         }
         else if (curInteractable != null)
         {
@@ -99,8 +105,10 @@ public class PCameraInteract : MonoBehaviour
 
     private void Update()
     {
-        mouseClick = Input.GetMouseButtonDown(0);
-        rightMouseClick = Input.GetMouseButtonDown(1);
+        //primaryInteract = Input.GetButtonDown("Interact");
+        //secondaryInteract = Input.GetButtonDown("Secondary Interact");
+        primaryInteract = Input.GetMouseButtonDown(0);
+        secondaryInteract = Input.GetMouseButtonDown(1);
     }
 
 
@@ -108,11 +116,11 @@ public class PCameraInteract : MonoBehaviour
     {
         if (curInteractable)
         {
-            if (mouseClick)
+            if (primaryInteract)
             {
                 curInteractable.OnInteract(this);
             }
-            else if(rightMouseClick)
+            else if(secondaryInteract)
             {
                 curInteractable.OnSecondaryInteract(this);
             }
@@ -123,6 +131,15 @@ public class PCameraInteract : MonoBehaviour
         }
         else
         {
+            /*if (primaryInteract)
+            {
+                characterAbility.OnUseAbility(aimHit);
+            }*/
+            if (secondaryInteract)
+            {
+                characterAbility.OnUseAbility(aimHit);
+            }
+
             PlayerInteraction();
         }
     }

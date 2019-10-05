@@ -30,7 +30,7 @@ public class PCameraInteract : MonoBehaviour
     {
         RaycastHit hit;
         Ray ray = new Ray(transform.position, transform.position + interactDistance * transform.forward);
-        Debug.DrawLine(transform.position, transform.position + interactDistance * transform.forward, Color.red);
+        Debug.DrawLine(transform.position, transform.position + interactDistance * transform.forward, Color.yellow);
         if (Physics.Raycast(ray, out hit))
         {
             GameObject hitGameObject = hit.collider.gameObject;
@@ -44,7 +44,7 @@ public class PCameraInteract : MonoBehaviour
                 {
                     if (hitObject != curInteractable)
                     {
-                        hitObject.OnBeginInteract();
+                        hitObject.OnBeginLooked();
                         curInteractable = hitObject;
                     }
                     else if (hitObject == curInteractable)
@@ -53,13 +53,13 @@ public class PCameraInteract : MonoBehaviour
                     }
                     else
                     {
-                        if (curInteractable != null) hitObject.OnEndInteract();
+                        if (curInteractable != null) hitObject.OnEndLooked();
                         curInteractable = null;
                     }
                 }
                 else if (curInteractable != null)
                 {
-                    curInteractable.OnEndInteract();
+                    curInteractable.OnEndLooked();
                     curInteractable = null;
                 }
                 
@@ -75,13 +75,7 @@ public class PCameraInteract : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
-                curInteractable.isBeingHeld = !curInteractable.isBeingHeld;
-                curInteractable.OnHoldInteraction(curInteractable.isBeingHeld);
-            }
-
-            if (curInteractable.isBeingHeld)
-            {
-                curInteractable.UpdateTransform(this.transform);
+                curInteractable.OnInteract(this);
             }
             else
             {

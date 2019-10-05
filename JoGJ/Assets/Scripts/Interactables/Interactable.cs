@@ -12,6 +12,16 @@ public class Interactable : MonoBehaviour
 
     protected Rigidbody rigidbody;
     protected Collider collider;
+
+    public PCameraInteract CameraParent;
+
+    public enum EInteractType{
+        EHoldable,
+        EMoveable
+    }
+
+    public EInteractType InteractType;
+
      
     // Start is called before the first frame update
     void Start()
@@ -31,29 +41,36 @@ public class Interactable : MonoBehaviour
         }
     }
 
-    public void OnHoldInteraction(bool bHeld)
+    public void OnInteract(PCameraInteract cameraParentIn)
     {
-        if (!rigidbody || !collider) return;
+        CameraParent = cameraParentIn;
+        if (!CameraParent) return;
 
-        if (isBeingHeld && rigidbody && collider)
+        if (InteractType == EInteractType.EHoldable)
         {
-            rigidbody.isKinematic = true;
-            collider.enabled = false;
-        }
-        else if (!isBeingHeld)
-        {
-            rigidbody.isKinematic = false;
-            collider.enabled = true;
+            if (!rigidbody || !collider) return;
+            isBeingHeld = !isBeingHeld;
+
+            if (isBeingHeld && rigidbody && collider)
+            {
+                rigidbody.isKinematic = true;
+                collider.enabled = false;
+            }
+            else if (!isBeingHeld)
+            {
+                rigidbody.isKinematic = false;
+                collider.enabled = true;
+            }
         }
     }
 
-   public void OnBeginInteract()
+   public void OnBeginLooked()
     {
         GetComponent<Renderer>().materials[1].SetFloat("_Outline", targetWidth);
         isLookedAt = true;
     }
 
-    public void OnEndInteract()
+    public void OnEndLooked()
     {
         GetComponent<Renderer>().materials[1].SetFloat("_Outline", 0);
         isLookedAt = false;
@@ -62,6 +79,12 @@ public class Interactable : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (CameraParent)
+        {
+            if(InteractType == EInteractType.EHoldable && isBeingHeld)
+            {
+                UpdateTransform(CameraParent.transform);
+            }
+        }   
     }
 }

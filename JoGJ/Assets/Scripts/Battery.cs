@@ -34,4 +34,8 @@ public class Battery : MonoBehaviour
     public float getCurrentAmount() {
         return currentAmount;
     }
+
+    public void reset() {
+        currentAmount = capacity;
+    }
 }

@@ -7,6 +7,7 @@ public class PCameraInteract : MonoBehaviour
     public float interactDistance = 10.0f;
     protected Camera camera;
     private Interactable curInteractable;
+    private bool mouseClick;
 
     // Start is called before the first frame update
     void Start()
@@ -30,7 +31,7 @@ public class PCameraInteract : MonoBehaviour
     {
         RaycastHit hit;
         Ray ray = new Ray(transform.position, transform.position + interactDistance * transform.forward);
-        Debug.DrawLine(transform.position, transform.position + interactDistance * transform.forward, Color.red);
+        Debug.DrawLine(transform.position, transform.position + interactDistance * transform.forward, Color.yellow);
         if (Physics.Raycast(ray, out hit))
         {
             GameObject hitGameObject = hit.collider.gameObject;
@@ -40,11 +41,11 @@ public class PCameraInteract : MonoBehaviour
             {
                 Debug.Log("Hitting");
 
-                if (hitObject != null)
+                if (hitObject != null) // Object is interactable
                 {
-                    if (hitObject != curInteractable)
+                    if (hitObject != curInteractable) // Object is a new interactable
                     {
-                        hitObject.OnBeginInteract();
+                        hitObject.OnBeginLooked();
                         curInteractable = hitObject;
                     }
                     else if (hitObject == curInteractable)
@@ -53,19 +54,24 @@ public class PCameraInteract : MonoBehaviour
                     }
                     else
                     {
-                        if (curInteractable != null) hitObject.OnEndInteract();
+                        if (curInteractable != null) hitObject.OnEndLooked();
                         curInteractable = null;
                     }
                 }
                 else if (curInteractable != null)
                 {
-                    curInteractable.OnEndInteract();
+                    curInteractable.OnEndLooked();
                     curInteractable = null;
                 }
                 
             }
-            Debug.LogWarning("Hit dist: " + hit.distance);
+            //Debug.LogWarning("Hit dist: " + hit.distance);
         }
+    }
+
+    private void Update()
+    {
+        mouseClick = Input.GetMouseButtonDown(0);
     }
 
 
@@ -73,15 +79,9 @@ public class PCameraInteract : MonoBehaviour
     {
         if (curInteractable)
         {
-            if (Input.GetMouseButtonDown(0))
+            if (mouseClick)
             {
-                curInteractable.isBeingHeld = !curInteractable.isBeingHeld;
-                curInteractable.OnHoldInteraction(curInteractable.isBeingHeld);
-            }
-
-            if (curInteractable.isBeingHeld)
-            {
-                curInteractable.UpdateTransform(this.transform);
+                curInteractable.OnInteract(this);
             }
             else
             {

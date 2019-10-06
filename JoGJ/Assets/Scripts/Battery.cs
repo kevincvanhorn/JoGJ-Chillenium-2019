@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Battery : MonoBehaviour
+public class Battery : MonoBehaviour, IPowerSource
 {
     private float currentAmount;
     public float capacity = 100f;
@@ -33,6 +33,10 @@ public class Battery : MonoBehaviour
 
     public float getCurrentAmount() {
         return currentAmount;
+    }
+
+    public float drainPower(float amount) {
+        return drainBattery(amount);
     }
 
     public void reset() {

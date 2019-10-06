@@ -70,7 +70,7 @@ public class Interactable : MonoBehaviour
         }
         else if (InteractType == EInteractType.EToggleable)
         {
-            isToggled = !isToggled;
+            PerformToggleAction();
         }
     }
 
@@ -119,5 +119,9 @@ public class Interactable : MonoBehaviour
         {
             rigidbody.AddExplosionForce(pushStrength, Camera.main.transform.position, pushDistance, 0.0f, ForceMode.Impulse);
         }
+    }
+
+    protected virtual void PerformToggleAction() {
+        isToggled = !isToggled;
     }
 }

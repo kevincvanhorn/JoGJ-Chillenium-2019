@@ -63,7 +63,8 @@ public class CharacterAbility : MonoBehaviour
             }
             else
             {
-                curBuildPillar = Instantiate(pillar, aimHit.point, Quaternion.LookRotation(aimHit.normal, transform.forward));
+                curBuildPillar = Instantiate(pillar, aimHit.point, Quaternion.LookRotation(aimHit.normal,
+                    Quaternion.AngleAxis(200, Vector3.up) * Vector3.one));
                 //curBuildPillar.transform.parent = aimHit.transform;
             }
             builtPillars.Add(curBuildPillar);

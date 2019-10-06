@@ -10,6 +10,8 @@ public class PCameraInteract : MonoBehaviour
     private CharacterAbility characterAbility;
     private bool primaryInteract;
     private bool secondaryInteract;
+    private bool chargeBattery;
+    private bool drainBattery;
     private RaycastHit aimHit;
 
     Camera MyCamera;
@@ -113,6 +115,8 @@ public class PCameraInteract : MonoBehaviour
         //secondaryInteract = Input.GetButtonDown("Secondary Interact");
         primaryInteract = Input.GetMouseButtonDown(0);
         secondaryInteract = Input.GetMouseButtonDown(1);
+        chargeBattery = Input.GetKey(KeyCode.E);
+        drainBattery = Input.GetKey(KeyCode.R);
     }
 
 
@@ -128,10 +132,19 @@ public class PCameraInteract : MonoBehaviour
             {
                 curInteractable.OnSecondaryInteract(this);
             }
+            else if(chargeBattery && typeof(PowerTransfer).IsInstanceOfType(curInteractable)) {
+                PowerTransfer p = (PowerTransfer) curInteractable;
+                p.DrainLinkedBattery();
+            }
+            else if(drainBattery && typeof(PowerTransfer).IsInstanceOfType(curInteractable)) {
+                PowerTransfer p = (PowerTransfer) curInteractable;
+                p.ChargeLinkedBattery();
+            }
             else
             {
                 PlayerInteraction();
             }
+            
         }
         else
         {

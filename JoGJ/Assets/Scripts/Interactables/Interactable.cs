@@ -27,7 +27,8 @@ public class Interactable : MonoBehaviour
         EHoldable,
         EMoveable,
         EToggleable,
-        EPushable
+        EPushable,
+        EStationaryCharger
     }
 
     public EInteractType InteractType;

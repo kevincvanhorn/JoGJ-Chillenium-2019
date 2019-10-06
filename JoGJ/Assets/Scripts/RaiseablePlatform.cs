@@ -11,6 +11,10 @@ public class RaiseablePlatform : MonoBehaviour
     private Vector3 TargetLoc;
     private float elapsed;
 
+    private void Start()
+    {
+        elapsed = TimeToLerp;
+    }
     public void SwitchLocation()
     {
         locationIndex++;
@@ -22,33 +26,16 @@ public class RaiseablePlatform : MonoBehaviour
         if (locationIndex < Locations.Count)
         {
             TargetLoc = Locations[locationIndex];
-            //elapsed = 0;
-            StartCoroutine(LerpLocation());
+            elapsed = 0;
         }
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         elapsed += Time.deltaTime;
-        if(elapsed < TimeToLerp)
+        if(elapsed <= TimeToLerp)
         {
-            Vector3.Lerp(this.transform.position, TargetLoc, elapsed / TimeToLerp);
-
-        }
-    }
-
-    IEnumerator LerpLocation(){
-        bool valid = true;
-        if (Locations.Count < 2) valid = false;
-        float time = 0;
-
-        while(valid){
-            time += 0.05f;
             this.transform.position = Vector3.Lerp(this.transform.position, TargetLoc, elapsed / TimeToLerp);
-            if (Vector3.Distance(this.transform.position, TargetLoc) < 0.05f) valid = false;
-            yield return new WaitForSeconds(0.05f);
         }
-
-        yield return null;
     }
 }

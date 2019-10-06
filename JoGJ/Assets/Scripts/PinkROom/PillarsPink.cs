@@ -10,12 +10,15 @@ public class PillarsPink : MonoBehaviour
 
     private Renderer renderer;
 
-    private bool bIsActive = false;
+    public bool bIsActive = false;
+
+    PinkCheckPillars manager;
 
     // Start is called before the first frame update
     void Start()
     {
         renderer = GetComponent<Renderer>();
+        manager = FindObjectOfType<PinkCheckPillars>();
     }
 
     // Update is called once per frame
@@ -38,6 +41,10 @@ public class PillarsPink : MonoBehaviour
                 renderer.material = DeactivatedMat;
             }
             bIsActive = !bIsActive;
+            if (manager)
+            {
+                manager.OnPillarChanged();
+            }
         }
     }
 }

@@ -21,8 +21,12 @@ public class Battery : MonoBehaviour
         float oldAmount = currentAmount;
         currentAmount += amount;
         if(currentAmount > capacity) currentAmount = capacity;
+<<<<<<< HEAD
         Debug.Log(currentAmount);
         percentage = currentAmount * invCapacity;
+=======
+        //Debug.Log(currentAmount);
+>>>>>>> 9cfb2a004a62d928058547ea0da302a401076cb3
         //return the amount of charge gained
         return ((capacity - oldAmount) > amount) ? amount : (capacity - oldAmount);
     }
@@ -31,8 +35,12 @@ public class Battery : MonoBehaviour
         float oldAmount = currentAmount;
         currentAmount -= amount;
         if(currentAmount < 0) currentAmount = 0;
+<<<<<<< HEAD
         Debug.Log(currentAmount);
         percentage = currentAmount * invCapacity;
+=======
+        //Debug.Log(currentAmount);
+>>>>>>> 9cfb2a004a62d928058547ea0da302a401076cb3
         //return the amount of charge drained
         return (oldAmount > amount) ? amount : oldAmount;
     }

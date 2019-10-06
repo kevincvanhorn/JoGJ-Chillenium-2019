@@ -14,6 +14,8 @@ public class CharacterAbility : MonoBehaviour
     private bool currentlyExpanding;
     private GameObject curBuildPillar;
     private Queue<GameObject> builtPillars;
+    public delegate void OnPushDelegate();
+    public static OnPushDelegate onPushDelegate; 
 
     public enum EAbilityType
     {
@@ -64,5 +66,14 @@ public class CharacterAbility : MonoBehaviour
             builtPillars.Enqueue(curBuildPillar);
             currentlyExpanding = true;
         }
+        else if (abilityType == EAbilityType.EPink)
+        {
+            Push();
+        }
+    }
+
+    public void Push()
+    {
+        onPushDelegate();
     }
 }

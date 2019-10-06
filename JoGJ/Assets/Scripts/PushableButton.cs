@@ -5,7 +5,7 @@ using UnityEngine;
 public class PushableButton : MonoBehaviour
 {
     public GameObject linkedObject;
-    public BoxCollider trigger;
+    public GameObject buttonObject;
     private bool isTriggered;
     private Collider triggeredCollider;
     
@@ -21,8 +21,7 @@ public class PushableButton : MonoBehaviour
     {
         if(isTriggered && !triggeredCollider)
         {
-            transform.localPosition += new Vector3(-1.0f, 0.0f, 0.0f);
-            trigger.size += new Vector3(1.0f, 0.0f, 0.0f);
+            buttonObject.transform.Translate(-1.0f, 0.0f, 0.0f);
             linkedObject.SetActive(true);
             isTriggered = false;
         }
@@ -30,8 +29,7 @@ public class PushableButton : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        transform.localPosition += new Vector3(1.0f, 0.0f, 0.0f);
-        trigger.size += new Vector3(-1.0f, 0.0f, 0.0f);
+        buttonObject.transform.Translate(1.0f, 0.0f, 0.0f);
         triggeredCollider = other;
         linkedObject.SetActive(false);
         isTriggered = true;
@@ -39,8 +37,7 @@ public class PushableButton : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        transform.localPosition += new Vector3(-1.0f, 0.0f, 0.0f);
-        trigger.size += new Vector3(1.0f, 0.0f, 0.0f);
+        buttonObject.transform.Translate(-1.0f, 0.0f, 0.0f);
         linkedObject.SetActive(true);
         isTriggered = false;
     }

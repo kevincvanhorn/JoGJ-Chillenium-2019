@@ -14,7 +14,6 @@ public class CharacterAbility : MonoBehaviour
     private bool currentlyExpanding;
     private GameObject curBuildPillar;
     private List<GameObject> builtPillars;
-    private List<GameObject> pillarParents;
     public delegate void OnPushDelegate();
     public static OnPushDelegate onPushDelegate; 
 
@@ -31,7 +30,6 @@ public class CharacterAbility : MonoBehaviour
     {
         currentlyExpanding = false;
         builtPillars = new List<GameObject>();
-        pillarParents = new List<GameObject>();
     }
 
     // Update is called once per frame
@@ -40,6 +38,11 @@ public class CharacterAbility : MonoBehaviour
         if(Input.GetMouseButton(1) && currentlyExpanding && curBuildPillar.transform.localScale.y < maxScaleAmount)
         {
             curBuildPillar.transform.localScale += new Vector3(0, 0, scaleAmount);
+            if (curBuildPillar.GetComponent<PillarTrigger>().isColliding)
+            {
+                currentlyExpanding = false;
+                curBuildPillar = null;
+            }
         }
         else
         {
@@ -56,17 +59,6 @@ public class CharacterAbility : MonoBehaviour
             {
                 Destroy(builtPillars[0]);
                 builtPillars.RemoveAt(0);
-                pillarParents.RemoveAt(0);
-                /*for(int pillars = 1; pillars < maxPillars; pillars++)
-                {
-                    if(pillarParents == null)
-                    {
-                        Destroy(builtPillars[pillars]);
-                        builtPillars.RemoveAt(pillars);
-                        pillarParents.RemoveAt(pillars);
-                    }
-                }*/
-                Debug.Log(pillarParents[0] + " " + pillarParents[1]);
             }
             Debug.Log(aimHit.normal);
             if(aimHit.normal.y < 0.01f)
@@ -78,8 +70,8 @@ public class CharacterAbility : MonoBehaviour
                 curBuildPillar = Instantiate(pillar, aimHit.point, Quaternion.LookRotation(aimHit.normal,
                     Quaternion.AngleAxis(200, Vector3.up) * Vector3.one));
             }
+            curBuildPillar.transform.Translate(0.0f, 0.1f, 0.0f);
             builtPillars.Add(curBuildPillar);
-            pillarParents.Add(aimHit.transform.gameObject);
             currentlyExpanding = true;
         }
         else if (abilityType == EAbilityType.EPink)

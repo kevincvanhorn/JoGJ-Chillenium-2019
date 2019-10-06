@@ -27,6 +27,7 @@ public class Interactable : MonoBehaviour
         EHoldable,
         EMoveable,
         EToggleable,
+        EPushable,
         EStationaryCharger
     }
 
@@ -120,6 +121,7 @@ public class Interactable : MonoBehaviour
     public void OnPush()
     {
         float objectDistance = Vector3.Distance(Camera.main.transform.position, transform.position);
+        CurrentPlayer curPlayer = FindObjectOfType<CurrentPlayer>(); 
         if(objectDistance < pushDistance)
         {
             rigidbody.AddExplosionForce(pushStrength, Camera.main.transform.position, pushDistance, 0.0f, ForceMode.Impulse);

@@ -7,6 +7,8 @@ public class Interactable : MonoBehaviour
     public float targetWidth = 5.0f;
     public float throwStrength = 20.0f;
     private bool isLookedAt;
+    public float pushStrength = 20.0f;
+    public float pushDistance = 10.0f;
 
     public bool isBeingHeld = false;
     public bool isToggled = false;
@@ -34,6 +36,7 @@ public class Interactable : MonoBehaviour
         rigidbody = GetComponent<Rigidbody>();
         collider = GetComponent<Collider>();
         isBeingHeld = false;
+        CharacterAbility.onPushDelegate += OnPush;  
     }
 
     public void UpdateTransform(Transform camTrans)
@@ -107,5 +110,14 @@ public class Interactable : MonoBehaviour
                 UpdateTransform(CameraParent.transform);
             }
         }   
+    }
+
+    public void OnPush()
+    {
+        float objectDistance = Vector3.Distance(Camera.main.transform.position, transform.position);
+        if(objectDistance < pushDistance)
+        {
+            rigidbody.AddExplosionForce(pushStrength, Camera.main.transform.position, pushDistance, 0.0f, ForceMode.Impulse);
+        }
     }
 }

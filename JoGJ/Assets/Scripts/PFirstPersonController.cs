@@ -45,6 +45,10 @@ public class PFirstPersonController : MonoBehaviour
         // Get Components attached to this object.
         rigidBody = GetComponent<Rigidbody>();
         Debug.Log("start");
+
+        DefaultPlayerJumpHeight = PlayerJumpHeight;
+        DefaultPlayerSprintSpeed = PlayerSprintSpeed;
+        DefaultPlayerSpeed = PlayerSpeed;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -68,6 +72,11 @@ public class PFirstPersonController : MonoBehaviour
         //check for dead battery
         if(battery.getCurrentAmount() <= 0.01f){
             PlayerJumpHeight = PlayerSprintSpeed = PlayerSpeed = 0;
+        }
+        else { //use normal values
+            PlayerJumpHeight = DefaultPlayerJumpHeight;
+            PlayerSprintSpeed = DefaultPlayerSprintSpeed;
+            PlayerSpeed = DefaultPlayerSpeed;
         }
 
         PlayerDirZ = Input.GetAxis("Vertical") * rigidBody.transform.forward;

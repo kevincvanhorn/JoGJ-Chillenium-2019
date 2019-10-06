@@ -18,12 +18,12 @@ public interface IPoweredDevice
 public class Circuit : MonoBehaviour
 {
     public List<GameObject> firstSegment;
-    private List<IPowerSource> firstSegment_Power;
-    private List<IPoweredDevice> firstSegment_Device;
+    private List<IPowerSource> firstSegment_Power = new List<IPowerSource>();
+    private List<IPoweredDevice> firstSegment_Device = new List<IPoweredDevice>();
     private float firstDeviceCost;
     public List<GameObject> secondSegment;
-    private List<IPowerSource> secondSegment_Power;
-    private List<IPoweredDevice> secondSegment_Device;
+    private List<IPowerSource> secondSegment_Power = new List<IPowerSource>();
+    private List<IPoweredDevice> secondSegment_Device = new List<IPoweredDevice>();
     private float secondDeviceCost;
     private List<IPowerSource> mergedPowerList;
     private List<IPoweredDevice> mergedDeviceList;
@@ -35,7 +35,7 @@ public class Circuit : MonoBehaviour
     void Start() {
         //the power and device lists for the two segments
         DivideList(firstSegment, firstSegment_Power, firstSegment_Device);
-        DivideList(firstSegment, firstSegment_Power, firstSegment_Device);
+        DivideList(secondSegment, secondSegment_Power, secondSegment_Device);
 
         //calculate device costs
         firstDeviceCost = 0f;
@@ -50,7 +50,7 @@ public class Circuit : MonoBehaviour
         }
 
         //calculate merged costs and list
-        List<IPoweredDevice> mergedDeviceList = new List<IPoweredDevice>(firstSegment_Device);
+        mergedDeviceList = new List<IPoweredDevice>(firstSegment_Device);
         mergedDeviceList.AddRange(secondSegment_Device);
         mergedDeviceCost = 0f;
         foreach (var item in mergedDeviceList)
@@ -58,7 +58,7 @@ public class Circuit : MonoBehaviour
             mergedDeviceCost += item.powerNeeded();
         }
 
-        List<IPowerSource> mergedPowerList = new List<IPowerSource>(firstSegment_Power);
+        mergedPowerList = new List<IPowerSource>(firstSegment_Power);
         mergedPowerList.AddRange(secondSegment_Power);
     }
 
@@ -114,8 +114,15 @@ public class Circuit : MonoBehaviour
             float totalPower = totalPower_first + totalPower_second;
             float totalCost = firstDeviceCost + secondDeviceCost;
 
-            if(totalCost > totalPower) return; //don't power anything
-
+            if(totalCost > totalPower) {
+                foreach (var item in mergedDeviceList)
+                {
+                    item.Powered = false;
+                }
+                
+                return; //don't power anything
+            }
+            
             foreach (var item in mergedDeviceList)
             {
                     item.Powered = true;
@@ -137,6 +144,12 @@ public class Circuit : MonoBehaviour
                     ApplyCost(firstDeviceCost, totalPower_first, firstSegment_Power);
                 }
             }
+            else {
+                foreach (var item in firstSegment_Device)
+                {
+                    item.Powered = false;
+                }
+            }
 
             //second segment
             if(totalPower_second > secondDeviceCost) { //go ahead and power the second segment
@@ -147,6 +160,12 @@ public class Circuit : MonoBehaviour
 
                 if(totalPower_second < float.MaxValue / 100f) {
                     ApplyCost(secondDeviceCost, totalPower_second, secondSegment_Power);
+                }
+            }
+            else {
+                foreach (var item in secondSegment_Device)
+                {
+                    item.Powered = false;
                 }
             }
         }

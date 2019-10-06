@@ -8,7 +8,7 @@ public class Interactable : MonoBehaviour
 {
     public static ToggleMethod toggleDelegate;
 
-    public float targetWidth = 5.0f;
+    public float targetWidth = 0.3f;
     public float throwStrength = 20.0f;
     private bool isLookedAt;
     public float pushStrength = 20.0f;
@@ -26,7 +26,9 @@ public class Interactable : MonoBehaviour
     public enum EInteractType{
         EHoldable,
         EMoveable,
-        EToggleable
+        EToggleable,
+        EPushable,
+        EStationaryCharger
     }
 
     public EInteractType InteractType;
@@ -119,6 +121,7 @@ public class Interactable : MonoBehaviour
     public void OnPush()
     {
         float objectDistance = Vector3.Distance(Camera.main.transform.position, transform.position);
+        CurrentPlayer curPlayer = FindObjectOfType<CurrentPlayer>(); 
         if(objectDistance < pushDistance)
         {
             rigidbody.AddExplosionForce(pushStrength, Camera.main.transform.position, pushDistance, 0.0f, ForceMode.Impulse);

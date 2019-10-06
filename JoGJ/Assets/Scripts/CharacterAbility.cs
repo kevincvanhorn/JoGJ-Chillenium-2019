@@ -14,6 +14,7 @@ public class CharacterAbility : MonoBehaviour
     private bool currentlyExpanding;
     private GameObject curBuildPillar;
     private List<GameObject> builtPillars;
+    private List<GameObject> pillarParents;
     public delegate void OnPushDelegate();
     public static OnPushDelegate onPushDelegate; 
 
@@ -30,6 +31,7 @@ public class CharacterAbility : MonoBehaviour
     {
         currentlyExpanding = false;
         builtPillars = new List<GameObject>();
+        pillarParents = new List<GameObject>();
     }
 
     // Update is called once per frame
@@ -54,19 +56,30 @@ public class CharacterAbility : MonoBehaviour
             {
                 Destroy(builtPillars[0]);
                 builtPillars.RemoveAt(0);
+                pillarParents.RemoveAt(0);
+                /*for(int pillars = 1; pillars < maxPillars; pillars++)
+                {
+                    if(pillarParents == null)
+                    {
+                        Destroy(builtPillars[pillars]);
+                        builtPillars.RemoveAt(pillars);
+                        pillarParents.RemoveAt(pillars);
+                    }
+                }*/
+                Debug.Log(pillarParents[0] + " " + pillarParents[1]);
             }
             Debug.Log(aimHit.normal);
             if(aimHit.normal.y < 0.01f)
             {
                 curBuildPillar = Instantiate(pillar, aimHit.point, Quaternion.LookRotation(aimHit.normal, Vector3.forward));
-                //curBuildPillar.transform.parent = aimHit.transform;
             }
             else
             {
-                curBuildPillar = Instantiate(pillar, aimHit.point, Quaternion.LookRotation(aimHit.normal, transform.forward));
-                //curBuildPillar.transform.parent = aimHit.transform;
+                curBuildPillar = Instantiate(pillar, aimHit.point, Quaternion.LookRotation(aimHit.normal,
+                    Quaternion.AngleAxis(200, Vector3.up) * Vector3.one));
             }
             builtPillars.Add(curBuildPillar);
+            pillarParents.Add(aimHit.transform.gameObject);
             currentlyExpanding = true;
         }
         else if (abilityType == EAbilityType.EPink)

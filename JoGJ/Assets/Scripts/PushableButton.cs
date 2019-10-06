@@ -23,6 +23,7 @@ public class PushableButton : MonoBehaviour
         {
             transform.localPosition += new Vector3(-1.0f, 0.0f, 0.0f);
             trigger.size += new Vector3(1.0f, 0.0f, 0.0f);
+            linkedObject.SetActive(true);
             isTriggered = false;
         }
     }

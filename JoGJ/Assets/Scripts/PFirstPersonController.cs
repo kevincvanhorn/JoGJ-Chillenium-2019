@@ -27,6 +27,7 @@ public class PFirstPersonController : MonoBehaviour
     private float DefaultPlayerJumpHeight, DefaultPlayerSprintSpeed, DefaultPlayerSpeed;
 
     public float airFactor = 1;
+    public float batterySlowDown = 0.5f;
     private bool bHitThisFrame;
 
     UIManager uiManager;
@@ -78,7 +79,7 @@ public class PFirstPersonController : MonoBehaviour
 
         if (PlayerSprintInput)
         {
-            velocity = PlayerSprintSpeed * (PlayerDirZ + PlayerDirX);
+            velocity = PlayerSprintSpeed * (PlayerDirZ + PlayerDirX) ;
         }
         else
         {

@@ -8,7 +8,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Testing/TestMovement_01 - Copy.unity
     guid: 1eeda330acc99374497f2192a38af9d2
+  - enabled: 1
+    path: Assets/Scenes/Testing/TestMovement_01.unity
+    guid: a5495398e12b6d840a35b9b9577af5e0
   m_configObjects: {}

@@ -79,7 +79,7 @@ public class PFirstPersonController : MonoBehaviour
     {
         if (!rigidBody) return;
 
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.T))
         {
             ResetPlayer();
         }

@@ -2,8 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public delegate void ToggleMethod(bool value);
+
 public class Interactable : MonoBehaviour
 {
+    public static ToggleMethod toggleDelegate;
+
     public float targetWidth = 5.0f;
     public float throwStrength = 20.0f;
     private bool isLookedAt;
@@ -123,5 +127,6 @@ public class Interactable : MonoBehaviour
 
     protected virtual void PerformToggleAction() {
         isToggled = !isToggled;
+        if(toggleDelegate != null) toggleDelegate(isToggled); //make all of the callbacks that have been registered
     }
 }

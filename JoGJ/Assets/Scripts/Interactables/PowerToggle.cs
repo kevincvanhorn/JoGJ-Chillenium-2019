@@ -20,6 +20,7 @@ public class PowerToggle : Interactable, IPoweredDevice
         if(powered) {
             Debug.Log("Toggling");
             isToggled = !isToggled;
+            if(toggleDelegate != null) toggleDelegate(isToggled); //make all of the callbacks that have been registered
         }
         else {
         //else give some negative sound effect

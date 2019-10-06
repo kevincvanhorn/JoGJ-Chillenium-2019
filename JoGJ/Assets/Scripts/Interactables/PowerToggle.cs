@@ -8,6 +8,7 @@ public class PowerToggle : Interactable, IPoweredDevice
     public bool Powered { get {return powered;} set {powered = value;} }
     public float powerDrainAmount = 2.0f;
 
+    public RaiseablePlatform platform;
 
     public Material ActivatedMaterial;
     public Material DeactivatedMaterial;
@@ -36,6 +37,7 @@ public class PowerToggle : Interactable, IPoweredDevice
             {
                 renderer.material = DeactivatedMaterial;
             }
+            if (platform) platform.SwitchLocation();
         }
         else {
         //else give some negative sound effect

@@ -11,6 +11,7 @@ public class CurrentPlayer : MonoBehaviour
         player1.SetActive(true); //start with player1 active
         player2.SetActive(false);
         player3.SetActive(false);
+
         currentPlayer = player1;
     }
 

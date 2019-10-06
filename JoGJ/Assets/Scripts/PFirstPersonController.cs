@@ -29,10 +29,13 @@ public class PFirstPersonController : MonoBehaviour
     public float airFactor = 1;
     private bool bHitThisFrame;
 
+    UIManager uiManager;
+
     // Start is called before the first frame update
     void Start()
     {
         battery = this.GetComponent<Battery>();
+        uiManager = FindObjectOfType<UIManager>();
 
         initialPostion = gameObject.transform.position;
 
@@ -113,7 +116,12 @@ public class PFirstPersonController : MonoBehaviour
         float amount = Mathf.Abs(Input.GetAxis("Vertical")) + Mathf.Abs(Input.GetAxis("Horizontal"));
         amount *= (PlayerSprintInput) ? PlayerSprintSpeed : PlayerSpeed;
         amount /= PlayerSpeed;
-        if(amount > 0.01f) battery.drainBattery(amount * movementBatteryDrain * Time.deltaTime);
+        if (amount > 0.01f)
+        {
+            battery.drainBattery(amount * movementBatteryDrain * Time.deltaTime);
+        }
+
+        if (uiManager) uiManager.drainBattery(this, battery.percentage);
     }
 
     //use when the robot runs out of battery

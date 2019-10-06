@@ -32,7 +32,17 @@ public class PFirstPersonController : MonoBehaviour
 
     UIManager uiManager;
 
+    public GameObject Checkpoint;
+    public Vector3 Offset;
+
     // Start is called before the first frame update
+    void ResetPlayer()
+    {
+        if (Checkpoint)
+        {
+            rigidBody.position = Checkpoint.transform.position + Offset;
+        }
+    }
     void Start()
     {
         battery = this.GetComponent<Battery>();
@@ -68,6 +78,11 @@ public class PFirstPersonController : MonoBehaviour
     void FixedUpdate()
     {
         if (!rigidBody) return;
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            ResetPlayer();
+        }
 
         //check for dead battery
         if(battery.getCurrentAmount() <= 0.01f){

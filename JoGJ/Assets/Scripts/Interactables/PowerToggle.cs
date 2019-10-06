@@ -9,6 +9,13 @@ public class PowerToggle : Interactable, IPoweredDevice
     public float powerDrainAmount = 2.0f;
 
 
+    public Material ActivatedMaterial;
+    public Material DeactivatedMaterial;
+    private Renderer renderer;
+    public void Start()
+    {
+        renderer = GetComponent<Renderer>();
+    }
     public float powerNeeded()
     {
         return powerDrainAmount;
@@ -21,10 +28,19 @@ public class PowerToggle : Interactable, IPoweredDevice
             Debug.Log("Toggling");
             isToggled = !isToggled;
             if(toggleDelegate != null) toggleDelegate(isToggled); //make all of the callbacks that have been registered
+            if (isToggled)
+            {
+                renderer.material = ActivatedMaterial;
+            }
+            else
+            {
+                renderer.material = DeactivatedMaterial;
+            }
         }
         else {
         //else give some negative sound effect
             Debug.Log("No power");
+            renderer.material = DeactivatedMaterial;
         }
     }
 }

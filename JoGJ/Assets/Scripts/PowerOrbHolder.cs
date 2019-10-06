@@ -7,6 +7,8 @@ public class PowerOrbHolder : MonoBehaviour, IPowerSource
     protected Battery powerOrb; // a reference to the power orb this is holding
     protected PowerTransfer orbInteractable;
 
+    public List<EHighlighted> wires;
+
     void Update() {
         if(powerOrb != null) {
             if(!orbInteractable.isBeingHeld) {
@@ -16,6 +18,11 @@ public class PowerOrbHolder : MonoBehaviour, IPowerSource
                 powerOrb = null;
                 orbInteractable = null;
             }
+        }
+
+        for (int i = 0; i < wires.Count; ++i)
+        {
+            wires[i].UpdateMaterial(powerOrb);
         }
     }
 
@@ -52,6 +59,11 @@ public class PowerOrbHolder : MonoBehaviour, IPowerSource
         if(powerOrb == null && b != null &&  p != null && p.InteractType == Interactable.EInteractType.EHoldable) {
             powerOrb = null;
             orbInteractable = null;
+        }
+
+        for (int i = 0; i < wires.Count; ++i)
+        {
+            wires[i].UpdateMaterial(powerOrb);
         }
     }
 

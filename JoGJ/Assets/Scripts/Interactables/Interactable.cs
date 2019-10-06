@@ -96,13 +96,19 @@ public class Interactable : MonoBehaviour
 
    public void OnBeginLooked()
     {
-        GetComponent<Renderer>().materials[1].SetFloat("_Outline", targetWidth);
+        if(GetComponent<Renderer>().materials.Length > 1)
+        {
+            GetComponent<Renderer>().materials[1].SetFloat("_Outline", targetWidth);
+        }
         isLookedAt = true;
     }
 
     public void OnEndLooked()
     {
-        GetComponent<Renderer>().materials[1].SetFloat("_Outline", 0);
+        if (GetComponent<Renderer>().materials.Length > 1)
+        {
+            GetComponent<Renderer>().materials[1].SetFloat("_Outline", 0);
+        }
         isLookedAt = false;
     }
 

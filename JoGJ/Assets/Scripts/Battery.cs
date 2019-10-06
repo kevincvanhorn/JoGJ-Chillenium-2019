@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Battery : MonoBehaviour
+public class Battery : MonoBehaviour, IPowerSource
 {
     private float currentAmount;
     public float percentage;
@@ -21,7 +21,6 @@ public class Battery : MonoBehaviour
         float oldAmount = currentAmount;
         currentAmount += amount;
         if(currentAmount > capacity) currentAmount = capacity;
-        Debug.Log(currentAmount);
         percentage = currentAmount * invCapacity;
         //return the amount of charge gained
         return ((capacity - oldAmount) > amount) ? amount : (capacity - oldAmount);
@@ -31,7 +30,6 @@ public class Battery : MonoBehaviour
         float oldAmount = currentAmount;
         currentAmount -= amount;
         if(currentAmount < 0) currentAmount = 0;
-        Debug.Log(currentAmount);
         percentage = currentAmount * invCapacity;
         //return the amount of charge drained
         return (oldAmount > amount) ? amount : oldAmount;
@@ -39,6 +37,10 @@ public class Battery : MonoBehaviour
 
     public float getCurrentAmount() {
         return currentAmount;
+    }
+
+    public float drainPower(float amount) {
+        return drainBattery(amount);
     }
 
     public void reset() {

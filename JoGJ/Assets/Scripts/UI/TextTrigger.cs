@@ -5,15 +5,12 @@ using UnityEngine;
 public class TextTrigger : MonoBehaviour
 {
     public string message;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+    private UIManager uIManager;
+    
+    void OnTriggerEnter(Collider other) {
+        if(other.gameObject.GetComponent<PFirstPersonController>() == null) return;
+        if(uIManager == null) uIManager = FindObjectOfType<UIManager>();
+        uIManager.DisplayMessage(message);
+        Debug.Log("Displaying message: " + message);
     }
 }

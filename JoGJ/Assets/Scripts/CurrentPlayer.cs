@@ -48,7 +48,7 @@ public class CurrentPlayer : MonoBehaviour
     }
 
     private void deactivate(GameObject p) {
-        if(p != null) p.SetActive(false);
+        if (p != null) p.SetActive(false);
     }
 
     private void activate(GameObject p) {

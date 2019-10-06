@@ -20,6 +20,6 @@ public class PinkCheckPillars : MonoBehaviour
             if (Pillars[i].bIsActive) numActive++;
         }
 
-        gameObject.SetActive(numActive == 4);
+        gameObject.SetActive(numActive != 4);
     }
 }

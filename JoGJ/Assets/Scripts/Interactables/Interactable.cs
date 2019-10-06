@@ -8,7 +8,7 @@ public class Interactable : MonoBehaviour
 {
     public static ToggleMethod toggleDelegate;
 
-    public float targetWidth = 5.0f;
+    public float targetWidth = 0.3f;
     public float throwStrength = 20.0f;
     private bool isLookedAt;
     public float pushStrength = 20.0f;

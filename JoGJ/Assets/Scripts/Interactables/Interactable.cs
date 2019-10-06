@@ -26,7 +26,8 @@ public class Interactable : MonoBehaviour
     public enum EInteractType{
         EHoldable,
         EMoveable,
-        EToggleable
+        EToggleable,
+        EStationaryCharger
     }
 
     public EInteractType InteractType;

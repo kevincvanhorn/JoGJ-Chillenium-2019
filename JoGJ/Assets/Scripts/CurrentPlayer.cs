@@ -4,13 +4,25 @@ using UnityEngine;
 
 public class CurrentPlayer : MonoBehaviour
 {
-    public GameObject player1, player2, player3;
-    private GameObject currentPlayer;
+    public GameObject player1, player2, player3; //between one and three players are allowed
+    public GameObject currentPlayer {get; private set; }
+
+    public static CurrentPlayer instance {get; private set;}
+
+
+    void Awake() {
+        if(instance != null && instance != this) {
+            Destroy(this.gameObject);
+        }
+        else {
+            instance = this;
+        }
+    }
 
     void Start() {
         player1.SetActive(true); //start with player1 active
-        player2.SetActive(false);
-        player3.SetActive(false);
+        if(player2 != null) player2.SetActive(false);
+        if(player3 != null) player3.SetActive(false);
 
         currentPlayer = player1;
     }
@@ -23,12 +35,12 @@ public class CurrentPlayer : MonoBehaviour
             deactivate(player2);
             deactivate(player3);
         }
-        if(Input.GetKeyDown(KeyCode.Alpha2) && !player2.activeSelf) {
+        if(player2 != null && Input.GetKeyDown(KeyCode.Alpha2) && !player2.activeSelf) {
             activate(player2);
             deactivate(player3);
             deactivate(player1);
         }
-        if(Input.GetKeyDown(KeyCode.Alpha3) && !player3.activeSelf) {
+        if(player3 != null && Input.GetKeyDown(KeyCode.Alpha3) && !player3.activeSelf) {
             activate(player3);
             deactivate(player1);
             deactivate(player2);
@@ -36,11 +48,14 @@ public class CurrentPlayer : MonoBehaviour
     }
 
     private void deactivate(GameObject p) {
-        p.SetActive(false);
+        if(p != null) p.SetActive(false);
     }
 
     private void activate(GameObject p) {
-        p.SetActive(true);
-        currentPlayer = p;
+        
+        if(p != null) {
+            p.SetActive(true);
+            currentPlayer = p;
+        }
     }
 }

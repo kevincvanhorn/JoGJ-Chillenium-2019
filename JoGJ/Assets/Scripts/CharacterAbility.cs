@@ -13,7 +13,7 @@ public class CharacterAbility : MonoBehaviour
 
     private bool currentlyExpanding;
     private GameObject curBuildPillar;
-    private Queue<GameObject> builtPillars;
+    private List<GameObject> builtPillars;
     public delegate void OnPushDelegate();
     public static OnPushDelegate onPushDelegate; 
 
@@ -29,7 +29,7 @@ public class CharacterAbility : MonoBehaviour
     void Start()
     {
         currentlyExpanding = false;
-        builtPillars = new Queue<GameObject>();
+        builtPillars = new List<GameObject>();
     }
 
     // Update is called once per frame
@@ -52,18 +52,21 @@ public class CharacterAbility : MonoBehaviour
         {
             if (builtPillars.Count == maxPillars)
             {
-                Destroy(builtPillars.Dequeue());
+                Destroy(builtPillars[0]);
+                builtPillars.RemoveAt(0);
             }
             Debug.Log(aimHit.normal);
             if(aimHit.normal.y < 0.01f)
             {
                 curBuildPillar = Instantiate(pillar, aimHit.point, Quaternion.LookRotation(aimHit.normal, Vector3.forward));
+                //curBuildPillar.transform.parent = aimHit.transform;
             }
             else
             {
                 curBuildPillar = Instantiate(pillar, aimHit.point, Quaternion.LookRotation(aimHit.normal, transform.forward));
+                //curBuildPillar.transform.parent = aimHit.transform;
             }
-            builtPillars.Enqueue(curBuildPillar);
+            builtPillars.Add(curBuildPillar);
             currentlyExpanding = true;
         }
         else if (abilityType == EAbilityType.EPink)

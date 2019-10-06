@@ -29,13 +29,14 @@ public class UIManager : MonoBehaviour
 
     public void drainBattery(PFirstPersonController Player, float batteryPercentage)
     {
+        if (!Player) return;
         if (Player && batteryPercentage >= 0.0f && batteryPercentage <= 1.0f)
         {
-            if (Player == Player_01)
+            if (Player == Player_01 && EnergyBar_01)
                 EnergyBar_01.gameObject.transform.localScale = new Vector3(batteryPercentage,1,1);
-            else if (Player == Player_02)
+            else if (Player == Player_02 && EnergyBar_02)
                 EnergyBar_02.gameObject.transform.localScale = new Vector3(batteryPercentage, 1, 1);
-            else if (Player == Player_03)
+            else if (Player == Player_03 && EnergyBar_03)
                 EnergyBar_03.gameObject.transform.localScale = new Vector3(batteryPercentage, 1, 1);
         }
     }

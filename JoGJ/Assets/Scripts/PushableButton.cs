@@ -22,8 +22,15 @@ public class PushableButton : MonoBehaviour
         if(isTriggered && !triggeredCollider)
         {
             buttonObject.transform.Translate(-1.0f, 0.0f, 0.0f);
-            linkedObject.SetActive(true);
             isTriggered = false;
+            if (linkedObject.GetComponent<RaiseablePlatform>() != null)
+            {
+                linkedObject.GetComponent<RaiseablePlatform>().SwitchLocation();
+            }
+            else
+            {
+                linkedObject.SetActive(true);
+            }
         }
     }
 
@@ -31,14 +38,28 @@ public class PushableButton : MonoBehaviour
     {
         buttonObject.transform.Translate(1.0f, 0.0f, 0.0f);
         triggeredCollider = other;
-        linkedObject.SetActive(false);
         isTriggered = true;
+        if (linkedObject.GetComponent<RaiseablePlatform>() != null)
+        {
+            linkedObject.GetComponent<RaiseablePlatform>().SwitchLocation();
+        }
+        else
+        {
+            linkedObject.SetActive(false);
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
         buttonObject.transform.Translate(-1.0f, 0.0f, 0.0f);
-        linkedObject.SetActive(true);
         isTriggered = false;
+        if (linkedObject.GetComponent<RaiseablePlatform>() != null)
+        {
+            linkedObject.GetComponent<RaiseablePlatform>().SwitchLocation();
+        }
+        else
+        {
+            linkedObject.SetActive(true);
+        }
     }
 }

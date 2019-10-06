@@ -9,8 +9,10 @@ public class PCameraController : MonoBehaviour
 
     public Rigidbody PlayerRigidbody;
 
-    private Vector2 mouseLook;
+    public Vector2 mouseLook;
     private Vector2 smoothV;
+
+    private float startAOffset = 0.0f;
 
     // Start is called before the first frame update
     void Start()

@@ -5,9 +5,13 @@ using UnityEngine;
 public class Interactable : MonoBehaviour
 {
     public float targetWidth = 5.0f;
+    public float throwStrength = 20.0f;
     private bool isLookedAt;
+    public float pushStrength = 20.0f;
+    public float pushDistance = 10.0f;
 
     public bool isBeingHeld = false;
+    public bool isToggled = false;
     public float HoldOffset;
 
     protected Rigidbody rigidbody;
@@ -17,7 +21,8 @@ public class Interactable : MonoBehaviour
 
     public enum EInteractType{
         EHoldable,
-        EMoveable
+        EMoveable,
+        EToggleable
     }
 
     public EInteractType InteractType;
@@ -31,6 +36,7 @@ public class Interactable : MonoBehaviour
         rigidbody = GetComponent<Rigidbody>();
         collider = GetComponent<Collider>();
         isBeingHeld = false;
+        CharacterAbility.onPushDelegate += OnPush;  
     }
 
     public void UpdateTransform(Transform camTrans)
@@ -62,6 +68,24 @@ public class Interactable : MonoBehaviour
                 collider.enabled = true;
             }
         }
+        else if (InteractType == EInteractType.EToggleable)
+        {
+            isToggled = !isToggled;
+        }
+    }
+
+    public void OnSecondaryInteract(PCameraInteract cameraParentIn)
+    {
+        if(InteractType == EInteractType.EHoldable)
+        {
+            if(isBeingHeld)
+            {
+                rigidbody.isKinematic = false;
+                collider.enabled = true;
+                isBeingHeld = false;
+                rigidbody.AddForce(cameraParentIn.transform.forward * throwStrength, ForceMode.Impulse);
+            }
+        }
     }
 
    public void OnBeginLooked()
@@ -86,5 +110,14 @@ public class Interactable : MonoBehaviour
                 UpdateTransform(CameraParent.transform);
             }
         }   
+    }
+
+    public void OnPush()
+    {
+        float objectDistance = Vector3.Distance(Camera.main.transform.position, transform.position);
+        if(objectDistance < pushDistance)
+        {
+            rigidbody.AddExplosionForce(pushStrength, Camera.main.transform.position, pushDistance, 0.0f, ForceMode.Impulse);
+        }
     }
 }
